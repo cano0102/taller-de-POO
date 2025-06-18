@@ -99,82 +99,76 @@
 # ●      Al final debe permitir ingresar otra persona y realizar todo el proceso anterior.
 
 
-
-
-
-
 import random
 
-class Persona():
-    def __init__(self, nombre: str = "" , documento :str = "", edad : int = None , sexo : str = "m", peso : float = None ,altura : float = None):
-
-       self.__documento  = documento
-
-       self.__nombre = nombre
-
-       self.__edad = edad
-
-       self.__sexo = sexo
-       self.__peso  = peso
-
-       self.__altura = altura
-
-       self._DNI = random.randint(10_000_000, 99_999_999)
-       
+class Persona:
+    def __init__(self, nombre: str = "", documento: str = "", edad: int = None,
+                sexo: str = "m", peso: float = None, altura: float = None):
+        self.__documento = documento
+        self.__nombre = nombre
+        self.__edad = edad
+        self.__sexo = sexo.lower()
+        self.__peso = peso
+        self.__altura = altura
+        self.__dni = random.randint(10_000_000, 99_999_999)
 
 
+    def get_documento(self): return self.__documento
+    def get_nombre(self): return self.__nombre
+    def get_edad(self): return self.__edad
+    def get_sexo(self): return self.__sexo
+    def get_peso(self): return self.__peso
+    def get_altura(self): return self.__altura
+    def get_dni(self): return self.__dni
 
-    def get_documento(self):
-        return self.__documento
+    def set_documento(self, documento): self.__documento = documento
+    def set_nombre(self, nombre): self.__nombre = nombre
+    def set_edad(self, edad): self.__edad = edad
+    def set_sexo(self, sexo): self.__sexo = sexo
+    def set_peso(self, peso): self.__peso = peso
+    def set_altura(self, altura): self.__altura = altura
 
-    def get_nombre(self):
-        return self.__nombre
+    def comprobar_sexo(self):
+        if self.__sexo not in ("m", "f"):
+            self.__sexo = "m"
 
-    def get_edad(self):
-        return self.__edad
-
-    def get_sexo(self):
-        return self.__sexo
-
-    def get_peso(self):
-        return self.__peso
-
-    def get_altura(self):
-        return self.__altura
-
-
-    def set_documento(self, documento):
-       self.__documento = documento
-
-    def set_nombre(self, nombre):
-       self.__nombre = nombre
-
-    def set_edad(self, edad):
-       self.__edad = edad
-
-    def set_sexo(self, sexo):
-       self.__sexo = sexo 
-
-    def set_peso(self, peso):
-       self.__peso = peso
-
-    def set_altura(self, altura):
-       self.__altura = altura
-
-
-    def comprobar_sexo():
-        pass
-
-
-    def calcularIMC():
-        pass
+    def calcularIMC(self):
+        
+        imc = self.__peso / (self.__altura ** 2)
+        if imc < 20:
+            return -1
+        elif imc < 25:
+            return 0
+        elif imc < 30:
+            return 1
+        elif imc < 35:
+            return 2
+        else:
+            return 3
 
     def esMayorDeEdad(self):
-        edad = self.get_edad()
-        mensaje = "Es mayor" if edad >= 18 else "Es menor"
-        print(mensaje)
-        
-    def listarInformacion():
-        pass
+        mayor =  self.__edad >= 18
+        print("Es mayor" if mayor else "Es menor")
+        return mayor
 
+    def listarInformacion(self):
+        estado_imc = self.calcularIMC()
+        estado_str = {
+            -1: "Bajo peso",
+             0: "Normal",
+             1: "Sobrepeso",
+             2: "Obesidad I",
+             3: "Obesidad II",
+        }.get(estado_imc, "IMC no calculado")
 
+        info = (
+            f"DNI: {self.__dni}"
+            f"Nombre: {self.__nombre}"
+            f"Documento: {self.__documento}"
+            f"Edad: {self.__edad}"
+            f"Sexo: {'Masculino' if self.__sexo == 'm' else 'Femenino'}"
+            f"Peso: {self.__peso}"
+            f"Altura: {self.__altura}"
+            f"Estado IMC: {estado_str}"
+        )
+        return info
